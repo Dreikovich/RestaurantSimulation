@@ -1,0 +1,33 @@
+# IDE / editor
+.idea/
+.vscode/
+*.DotSettings.user
+*.DotSettings
+
+# Build output (C# / .NET)
+bin/
+obj/
+*.dll
+*.pdb
+*.cache
+
+# Rider / ReSharper
+*.rider.project.restore.info
+rider.project.model.nuget.info
+
+# NuGet
+*.nuget.cache
+*.nuget.dgspec.json
+*.nuget.g.props
+*.nuget.g.targets
+
+# Test coverage
+.msCoverageSourceRootsMapping_*
+CoverletSourceRootsMapping_*
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Aider
+.aider*
