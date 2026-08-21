@@ -11,8 +11,7 @@ public sealed class Money
         {
             throw new ArgumentException("Amount cannot be negative", nameof(amount));
         }
-
-        Amount = amount;
+        
         Currency = currency;
     }
 
@@ -45,11 +44,19 @@ public sealed class Money
 
     public Money Multiply(decimal factor)
     {
+        if (factor < 0)
+        {
+            throw new ArgumentException("Factor cannot be negative", nameof(factor));
+        }
         return new Money(Amount * factor, Currency);
     }
 
     public Money Divide(decimal factor)
     {
+        if (factor <= 0)
+        {
+            throw new ArgumentException("Factor must be positive", nameof(factor));
+        }
         return new Money(Amount / factor, Currency);
     }
 
@@ -79,6 +86,6 @@ public sealed class Money
 public enum Currency
 {
     USD,
-    PLN, 
+    PLN,
     EUR
 }
