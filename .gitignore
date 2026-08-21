@@ -4,6 +4,9 @@
 *.DotSettings.user
 *.DotSettings
 
+# Roo local config (mentor skill, etc.)
+.roo/
+
 # Build output (C# / .NET)
 bin/
 obj/
