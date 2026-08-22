@@ -1,63 +1,77 @@
 namespace RestaurantSimulation.Domain.ValueObject;
 
-public sealed class Money
+public sealed class Money : IEquatable<Money>
 {
     public decimal Amount { get; }
     public Currency Currency { get; }
-
-    public Money(decimal amount, Currency currency)
+    
+    private Money(decimal amount, Currency currency)
     {
-        if (amount < 0)
-        {
-            throw new ArgumentException("Amount cannot be negative", nameof(amount));
-        }
-
         Amount = amount;
         Currency = currency;
     }
 
-    public Money Add(Money other)
+    public static Money Create(decimal amount, Currency currency)
     {
-        if (other.Currency != Currency)
+        if (amount < 0)
         {
-            throw new ArgumentException("Cannot add money in different currencies",
-                nameof(other));
+            throw new ArgumentOutOfRangeException(nameof(amount),"Amount cannot be negative");
         }
-        return new Money(Amount + other.Amount, Currency);
-    }
-
-    public Money Subtract(Money other)
-    {
-        if (other.Currency != Currency)
-        {
-            throw new ArgumentException("Cannot subtract money in different currencies",
-                nameof(other));
-        }
-        
-        var result = Amount - other.Amount;
-        if (result < 0)
-        {
-            throw new ArgumentException("Result cannot be negative", nameof(other));
-        }
-
-        return new Money(result, Currency);
+        return new Money(FromRounded(amount), currency);
     }
 
     public Money Multiply(decimal factor)
     {
-        return new Money(Amount * factor, Currency);
+        if (factor < 0)
+        {
+            throw new ArgumentOutOfRangeException(nameof(factor), "Factor cannot be negative");
+        }
+        return Create(FromRounded(Amount * factor), Currency);
     }
-
+    
     public Money Divide(decimal factor)
     {
-        return new Money(Amount / factor, Currency);
+        return factor switch
+        {
+            0 => throw new DivideByZeroException("Cannot divide by zero"),
+            < 0 => throw new ArgumentOutOfRangeException(nameof(factor), "Factor cannot be negative"),
+            _ =>  Create(FromRounded(Amount / factor), Currency)
+        };
     }
 
-    public override bool Equals(object? obj)
+    public Money Add(Money other)
     {
-        if (obj is not Money other) return false;
+        if (!EnsureSameCurrency(other.Currency))
+        {
+            throw new ArgumentException("Currency should be the same",nameof(other.Currency));
+        }
 
-        return Amount == other.Amount && Currency == other.Currency;
+        var result = Amount + other.Amount;
+        return Create(FromRounded(result), Currency);
+    }
+    
+    public Money Subtract(Money other)
+    {
+        if (!EnsureSameCurrency(other.Currency))
+        {
+            throw new ArgumentException("Currency should be the same",nameof(other.Currency));
+        }
+
+        var result = Amount - other.Amount;
+        return Create(FromRounded(result), Currency);
+    }
+
+    public bool Equals(Money? money)
+    {
+        if (money is null)
+        {
+            return false;
+        }
+        if (!EnsureSameCurrency(money.Currency))
+        {
+            return false;
+        }
+        return money.Amount == Amount;
     }
 
     public override int GetHashCode()
@@ -65,20 +79,33 @@ public sealed class Money
         return HashCode.Combine(Amount, Currency);
     }
 
+    public override string ToString()
+    {
+        return $"Amount:{Amount:0.00} {Currency}";
+    }
+
     public static bool operator ==(Money? a, Money? b)
     {
-        return a?.Equals(b) ?? b is null;
+        return Equals(a, b);
     }
 
     public static bool operator !=(Money? a, Money? b)
     {
         return !(a == b);
     }
-}
 
-public enum Currency
-{
-    USD,
-    PLN, 
-    EUR
+    public override bool Equals(object? obj)
+    {
+        return Equals(obj as Money);
+    }
+
+    private static decimal FromRounded(decimal amount)
+    {
+        return Math.Round(amount, 2, MidpointRounding.ToEven);
+    }
+
+    private bool EnsureSameCurrency(Currency currency)
+    {
+        return currency == Currency;
+    }
 }
