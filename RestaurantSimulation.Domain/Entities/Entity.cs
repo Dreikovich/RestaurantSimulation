@@ -1,9 +1,14 @@
 namespace RestaurantSimulation.Domain.Entities;
 
-public abstract class Entity<TId>
+public abstract class Entity<TId> where TId : notnull
 {
-    public TId Id { get; protected set; }
+    public TId Id { get; }
 
+    protected Entity(TId id)
+    {
+        Id = id;
+    }
+    
     public override bool Equals(object? obj)
     {
         return obj is Entity<TId> other && EqualityComparer<TId>.Default.Equals(other.Id, Id);
@@ -11,6 +16,6 @@ public abstract class Entity<TId>
 
     public override int GetHashCode()
     {
-        return Id.GetHashCode();
+        return EqualityComparer<TId>.Default.GetHashCode(Id);
     }
 }
