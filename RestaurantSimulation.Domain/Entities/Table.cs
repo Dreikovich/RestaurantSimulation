@@ -15,6 +15,10 @@ public class Table : Entity<TableId>
 
     public static Table Create(int capacity)
     {
+        if (capacity <= 0)
+        {
+            throw new ArgumentOutOfRangeException(nameof(capacity), "Table capacity cannot be negative or zero");
+        }
         var id = TableId.New();
         return new Table(id, capacity);
     }
@@ -27,6 +31,11 @@ public class Table : Entity<TableId>
         }
 
         IsOccupied = true;
+    }
+
+    public void Free()
+    {
+        IsOccupied = false;
     }
 }
 
