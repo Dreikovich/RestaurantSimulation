@@ -8,7 +8,7 @@ public class TableTests
     [Fact]
     public void Create_SeatCapacityAndIsFree()
     {
-        var table = Table.Create(4);
+        var table = Table.Create(new TableId(Guid.NewGuid()), 4);
         Assert.Equal(4, table.Capacity);
         Assert.False(table.IsOccupied);
     }
@@ -16,13 +16,13 @@ public class TableTests
     [Fact]
     public void Create_NegativeCapacity_Throws()
     {
-        Assert.Throws<ArgumentOutOfRangeException>(()=>Table.Create(-4));
+        Assert.Throws<ArgumentOutOfRangeException>(()=>Table.Create(new TableId(Guid.NewGuid()), -4));
     }
 
     [Fact]
     public void Occupy_FreeTable_BecomesOccupied()
     {
-        var table = Table.Create(4);
+        var table = Table.Create(new TableId(Guid.NewGuid()), 4);
         table.Occupy();
         Assert.True(table.IsOccupied);
     } 
@@ -30,7 +30,7 @@ public class TableTests
     [Fact]
     public void Occupy_OccupiedTable_Throws()
     {
-        var table = Table.Create(4);
+        var table = Table.Create(new TableId(Guid.NewGuid()), 4);
         table.Occupy();
         Assert.Throws<TableAlreadyOccupiedException>(table.Occupy);
     }
@@ -38,7 +38,7 @@ public class TableTests
     [Fact]
     public void Free_OccupiedTable_BecomesFree()
     {
-        var table = Table.Create(4);
+        var table = Table.Create(new TableId(Guid.NewGuid()), 4);
         table.Occupy();
         table.Free();
         Assert.False(table.IsOccupied);

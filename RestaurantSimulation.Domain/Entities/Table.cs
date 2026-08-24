@@ -13,13 +13,12 @@ public class Table : Entity<TableId>
         IsOccupied = false;
     }
 
-    public static Table Create(int capacity)
+    internal static Table Create(TableId id, int capacity)
     {
         if (capacity <= 0)
         {
             throw new ArgumentOutOfRangeException(nameof(capacity), "Table capacity cannot be negative or zero");
         }
-        var id = TableId.New();
         return new Table(id, capacity);
     }
 
@@ -41,7 +40,7 @@ public class Table : Entity<TableId>
 
 public record struct TableId(Guid Id)
 {
-    public static TableId New()
+    internal static TableId New()
     {
         return new TableId(Guid.NewGuid());
     }

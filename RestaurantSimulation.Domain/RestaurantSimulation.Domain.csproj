@@ -5,5 +5,10 @@
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
     </PropertyGroup>
+    
+    <!--to remove after creation restaturant aggregat -->
+    <ItemGroup>
+        <InternalsVisibleTo Include="RestaurantSimulation.Domain.Tests"/>
+    </ItemGroup>
 
 </Project>
