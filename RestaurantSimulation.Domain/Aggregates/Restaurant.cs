@@ -1,3 +1,4 @@
+using RestaurantSimulation.Domain.Common;
 using RestaurantSimulation.Domain.Entities;
 
 namespace RestaurantSimulation.Domain.Aggregates;
@@ -19,26 +20,27 @@ public class Restaurant : AggregateRoot<RestaurantId>
     {
         if (maxSeatingCapacity <= 0)
         {
-            throw new ArgumentOutOfRangeException(nameof(maxSeatingCapacity), "Out of capacity limit");
+            throw new ArgumentOutOfRangeException(nameof(maxSeatingCapacity), "Negative or zero value doesnt allow");
         }
         
         return new Restaurant(RestaurantId.New(), maxSeatingCapacity);
     }
 
-    public void AddTable(int capacity)
+    public Result AddTable(int capacity)
     {
         if (capacity <= 0)
         {
-            throw new ArgumentOutOfRangeException(nameof(capacity), "capacity cannot be negative or zero");
+            return Result.Failure(new InvalidCapacityError(capacity));
         }
        
         if (_totalSeats + capacity > MaxSeatingCapacity)
         {
-            throw new ArgumentOutOfRangeException(nameof(capacity), "Exceed max seating capacity");
+            return Result.Failure(new ExceedMaxSittingCapacity(_totalSeats, capacity));
         }
         var table = Table.Create(TableId.New(), capacity);
         _tables.Add(table);
         _totalSeats += capacity;
+        return Result.Success();
     }
 }
 
