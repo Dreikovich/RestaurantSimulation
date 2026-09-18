@@ -4,6 +4,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RestaurantSimulation.Domain
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RestaurantSimulation.Domain.Tests", "RestaurantSimulation.Domain.Tests\RestaurantSimulation.Domain.Tests.csproj", "{59C1EA28-9D63-4993-A445-B31F965E9697}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RestaurantSimulation.Web", "RestaurantSimulation.Web\RestaurantSimulation.Web.csproj", "{C687BC81-1945-44FF-B8A4-3B804E40ED6D}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -18,5 +20,9 @@ Global
 		{59C1EA28-9D63-4993-A445-B31F965E9697}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{59C1EA28-9D63-4993-A445-B31F965E9697}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{59C1EA28-9D63-4993-A445-B31F965E9697}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C687BC81-1945-44FF-B8A4-3B804E40ED6D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C687BC81-1945-44FF-B8A4-3B804E40ED6D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C687BC81-1945-44FF-B8A4-3B804E40ED6D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C687BC81-1945-44FF-B8A4-3B804E40ED6D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

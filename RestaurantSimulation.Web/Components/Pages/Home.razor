@@ -1,0 +1,27 @@
+@page "/"
+@rendermode InteractiveServer
+@using RestaurantSimulation.Domain.Aggregates
+
+<h3>Restaurant</h3>
+<p>Max siting capacity = @_restaurants.MaxSeatingCapacity</p>
+<input type="number" min="1" @bind="_selectedCapacity"/>
+<button @onclick="AddTable">Add table</button>
+
+
+@foreach (var table in _restaurants.Tables)
+{
+    <p>table with @table.Capacity</p>
+}
+
+@code {
+    private readonly Restaurant _restaurants = Restaurant.Create(20);
+    
+    private int _selectedCapacity = 4;
+
+    private void AddTable()
+    {
+        var result = _restaurants.AddTable(_selectedCapacity);
+        Console.WriteLine(result);
+    }
+    
+}

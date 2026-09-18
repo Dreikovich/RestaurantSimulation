@@ -34,3 +34,6 @@ Thumbs.db
 
 # Aider
 .aider*
+
+# Local tooling / session state
+.freebuff/
