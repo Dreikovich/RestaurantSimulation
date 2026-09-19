@@ -36,6 +36,16 @@ public class Table : Entity<TableId>
     {
         IsOccupied = false;
     }
+
+    public bool CanSeat(CustomerGroup customerGroup)
+    {
+        if (IsOccupied)
+        {
+            return false;
+        }
+
+        return Capacity >= customerGroup.Size;
+    }
 }
 
 public record struct TableId(Guid Id)

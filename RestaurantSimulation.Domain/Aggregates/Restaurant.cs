@@ -42,6 +42,22 @@ public class Restaurant : AggregateRoot<RestaurantId>
         _totalSeats += capacity;
         return Result.Success();
     }
+
+    public Result TrySeat(CustomerGroup customerGroup)
+    {
+        foreach (var table in _tables)
+        {
+            if (!table.CanSeat(customerGroup))
+            {
+                continue;
+            }
+            
+            table.Occupy();
+            return Result.Success();
+        }
+
+        return Result.Failure(new TableSeatError(customerGroup.Size));
+    }
 }
 
 public record struct RestaurantId(Guid Id)
