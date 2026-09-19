@@ -1,4 +1,5 @@
 using RestaurantSimulation.Domain.Aggregates;
+using RestaurantSimulation.Domain.Common;
 
 namespace RestaurantSimulation.Domain.Tests.Aggregates;
 
@@ -37,18 +38,24 @@ public class RestaurantTests
     }
     
     [Fact]
-    public void AddTable_WithInvalidCapacity_Throws()
+    public void AddTable_ExceedMaxLimitCapacity_ReturnFailureResult()
     {
         var restaurant = Restaurant.Create(10);
-        Assert.Throws<ArgumentOutOfRangeException>(()=>restaurant.AddTable(11));
+        var result = restaurant.AddTable(11);
+        Assert.False(result.IsSuccess);
+        Assert.False(string.IsNullOrEmpty(result.Error?.Message));
+        Assert.IsType<ExceedMaxSittingCapacityError>(result.Error);
         Assert.Empty(restaurant.Tables);
     }
     
     [Fact]
-    public void AddTable_WithNegativeCapacity_Throws()
+    public void AddTable_WithNegativeCapacity_ReturnFailureResult()
     {
         var restaurant = Restaurant.Create(10);
-        Assert.Throws<ArgumentOutOfRangeException>(()=>restaurant.AddTable(-10));
+        var result = restaurant.AddTable(-10);
+        Assert.False(result.IsSuccess);
+        Assert.False(string.IsNullOrEmpty(result.Error?.Message));
+        Assert.IsType<InvalidCapacityError>(result.Error);
         Assert.Empty(restaurant.Tables);
     }
     
@@ -68,7 +75,10 @@ public class RestaurantTests
         var restaurant = Restaurant.Create(10);
         restaurant.AddTable(2);
         restaurant.AddTable(4);
-        Assert.Throws<ArgumentOutOfRangeException>(()=>restaurant.AddTable(10));
+        var result = restaurant.AddTable(10);
+        Assert.False(result.IsSuccess);
+        Assert.False(string.IsNullOrEmpty(result.Error?.Message));
+        Assert.IsType<ExceedMaxSittingCapacityError>(result.Error);
         Assert.Equal(6, restaurant.Tables.Sum(t=>t.Capacity));
     }
 

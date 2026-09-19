@@ -35,7 +35,7 @@ public class Restaurant : AggregateRoot<RestaurantId>
        
         if (_totalSeats + capacity > MaxSeatingCapacity)
         {
-            return Result.Failure(new ExceedMaxSittingCapacity(_totalSeats, capacity));
+            return Result.Failure(new ExceedMaxSittingCapacityError(_totalSeats, capacity));
         }
         var table = Table.Create(TableId.New(), capacity);
         _tables.Add(table);
