@@ -7,11 +7,14 @@
 <input type="number" min="1" @bind="_selectedCapacity"/>
 <button @onclick="AddTable">Add table</button>
 
-
-@foreach (var table in _restaurants.Tables)
-{
-    <p>table with @table.Capacity</p>
-}
+<div style="display:flex; gap: 80px; margin-top: 100px; margin-left: 100px;">
+    @for (int i=0; i<_restaurants.Tables.Count; i++)
+    {
+        <div class="table @(_restaurants.Tables.ElementAt(i).IsOccupied ? "occupied" : "free")">
+            @(i + 1)
+        </div>
+    }
+</div>
 
 @code {
     private readonly Restaurant _restaurants = Restaurant.Create(20);
