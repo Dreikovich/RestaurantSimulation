@@ -1,3 +1,5 @@
+using RestaurantSimulation.Domain.Entities;
+
 namespace RestaurantSimulation.Domain.Common;
 
 public sealed record InvalidCapacityError(int capacity)
@@ -11,3 +13,9 @@ public sealed record InvalidSizeError(int size)
 
 public sealed record TableSeatError(int groupSize)
     : Error($"There is no table to match your group size");
+
+public sealed record TableFreeError()
+    : Error($"Table is not occupied, cannot free”.");
+
+public sealed record NotFoundTableError(TableId id)
+    : Error($"Not found table with id - {id}");

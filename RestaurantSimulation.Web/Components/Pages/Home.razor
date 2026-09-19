@@ -1,6 +1,8 @@
 @page "/"
 @rendermode InteractiveServer
 @using RestaurantSimulation.Domain.Aggregates
+@using RestaurantSimulation.Domain.Common
+@using RestaurantSimulation.Domain.Time
 
 <h3>Restaurant</h3>
 <p>Max siting capacity = @_restaurants.MaxSeatingCapacity</p>
@@ -17,7 +19,8 @@
 </div>
 
 @code {
-    private readonly Restaurant _restaurants = Restaurant.Create(20);
+    private static readonly ITimeProvider Clock = new SystemTimeProvider();
+    private readonly Restaurant _restaurants = Restaurant.Create(20, Clock );
     
     private int _selectedCapacity = 4;
 
