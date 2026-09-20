@@ -22,3 +22,19 @@
     border-radius: 50%;
     background: #e53935;
 }
+
+.circle {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background-color: #4CAF50;
+    color: black;
+    
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    
+    font-size: 20px;
+    font-weight: bold;
+    font-family: Arial, sans-serif;
+}

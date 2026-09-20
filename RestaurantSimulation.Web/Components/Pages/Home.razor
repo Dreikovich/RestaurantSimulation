@@ -2,6 +2,7 @@
 @rendermode InteractiveServer
 @using RestaurantSimulation.Domain.Aggregates
 @using RestaurantSimulation.Domain.Common
+@using RestaurantSimulation.Domain.Entities
 @using RestaurantSimulation.Domain.Time
 
 <h3>Restaurant</h3>
@@ -9,12 +10,30 @@
 <input type="number" min="1" @bind="_selectedCapacity"/>
 <button @onclick="AddTable">Add table</button>
 
+<input type="number" min="1" @bind="_groupSize" />
+<button @onclick="AddCustomerGroup">Add Customer group</button>
+
+<div>
+    <p>Waiting</p>
+    <div style="display: flex; justify-content: left; align-items: center; flex-wrap: wrap; margin-top: 10px; gap:5px;">
+        @foreach (var waitingGroup in _restaurants.WaitingGuests)
+        {
+            <div class="circle">
+                @waitingGroup.Size
+            </div>
+        }
+       
+    </div>
+</div>
 <div style="display:flex; gap: 80px; margin-top: 100px; margin-left: 100px;">
     @for (int i=0; i<_restaurants.Tables.Count; i++)
     {
-        <div class="table @(_restaurants.Tables.ElementAt(i).IsOccupied ? "occupied" : "free")">
+        var table = _restaurants.Tables.ElementAt(i);
+        <div class="table @(table.IsOccupied ? "occupied" : "free")">
             @(i + 1)
+            @(table.SeatedGroup?.Size.ToString() ?? "")
         </div>
+        
     }
 </div>
 
@@ -23,11 +42,21 @@
     private readonly Restaurant _restaurants = Restaurant.Create(20, Clock );
     
     private int _selectedCapacity = 4;
+    private int _groupSize = 4;
 
     private void AddTable()
     {
-        var result = _restaurants.AddTable(_selectedCapacity);
-        Console.WriteLine(result);
+        _restaurants.AddTable(_selectedCapacity);
     }
-    
+
+    private void AddCustomerGroup()
+    {
+        var result = CustomerGroup.Create(_groupSize);
+        if (!result.IsSuccess)
+        {
+            return;
+        }
+
+        _restaurants.TrySeat(result.Value!);
+    }
 }
