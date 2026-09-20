@@ -22,24 +22,27 @@ public class TableTests
     [Fact]
     public void Occupy_FreeTable_BecomesOccupied()
     {
+        var customerGroup = CustomerGroup.Create(4).Value;
         var table = Table.Create(new TableId(Guid.NewGuid()), 4);
-        table.Occupy();
+        table.Occupy(customerGroup!);
         Assert.True(table.IsOccupied);
     } 
     
     [Fact]
     public void Occupy_OccupiedTable_Throws()
     {
+        var customerGroup = CustomerGroup.Create(4).Value;
         var table = Table.Create(new TableId(Guid.NewGuid()), 4);
-        table.Occupy();
-        Assert.Throws<TableAlreadyOccupiedException>(table.Occupy);
+        table.Occupy(customerGroup!);
+        Assert.Throws<TableAlreadyOccupiedException>(()=>table.Occupy(customerGroup!));
     }
     
     [Fact]
     public void Free_OccupiedTable_BecomesFree()
     {
+        var customerGroup = CustomerGroup.Create(4).Value;
         var table = Table.Create(new TableId(Guid.NewGuid()), 4);
-        table.Occupy();
+        table.Occupy(customerGroup!);
         table.Free();
         Assert.False(table.IsOccupied);
     }

@@ -11,6 +11,9 @@ public class Restaurant : AggregateRoot<RestaurantId>
     private readonly ITimeProvider _clock;
     private int _totalSeats;
     public IReadOnlyCollection<Table> Tables => _tables;
+
+    public List<CustomerGroup> WaitingGuests => _waitingGuests;
+
     private readonly TimeSpan _waitTime = TimeSpan.FromMinutes(10);
     
     internal Restaurant(RestaurantId id, int maxSeatingCapacity, ITimeProvider clock) : base(id)
@@ -68,7 +71,7 @@ public class Restaurant : AggregateRoot<RestaurantId>
             var bestGroup = FindBestFitCustomerGroupFromGuestList(table);
             if (bestGroup is not null)
             {
-                table.Occupy();
+                table.Occupy(bestGroup);
                 _waitingGuests.Remove(bestGroup);
             }
         }
@@ -107,7 +110,7 @@ public class Restaurant : AggregateRoot<RestaurantId>
                 continue;
             }
             
-            table.Occupy();
+            table.Occupy(customerGroup);
             return Result<SeatingOutcome>.Success(SeatingOutcome.Seated);
         }
 

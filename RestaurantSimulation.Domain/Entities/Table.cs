@@ -6,6 +6,7 @@ public class Table : Entity<TableId>
 {
     public int Capacity { get; }
     public bool IsOccupied { get; private set; }
+    public CustomerGroup? SeatedGroup { get; private set; }
 
     private Table(TableId id, int capacity) : base(id)
     {
@@ -22,18 +23,20 @@ public class Table : Entity<TableId>
         return new Table(id, capacity);
     }
 
-    public void Occupy()
+    public void Occupy(CustomerGroup customerGroup)
     {
         if (IsOccupied)
         {
             throw new TableAlreadyOccupiedException();
         }
 
+        SeatedGroup = customerGroup;
         IsOccupied = true;
     }
 
     public void Free()
     {
+        SeatedGroup = null;
         IsOccupied = false;
     }
 
