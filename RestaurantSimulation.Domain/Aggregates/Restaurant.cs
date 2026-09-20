@@ -60,6 +60,8 @@ public class Restaurant : AggregateRoot<RestaurantId>
         { 
             return Result.Failure(new TableFreeError());
         }
+        
+        table.Free();
 
         if ( _waitingGuests.Any())
         {
@@ -68,7 +70,6 @@ public class Restaurant : AggregateRoot<RestaurantId>
             {
                 table.Occupy();
                 _waitingGuests.Remove(bestGroup);
-                
             }
         }
 
