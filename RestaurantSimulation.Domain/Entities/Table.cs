@@ -29,7 +29,7 @@ public class Table : Entity<TableId>
         {
             throw new TableAlreadyOccupiedException();
         }
-
+        customerGroup.SeatAll();
         SeatedGroup = customerGroup;
         IsOccupied = true;
     }

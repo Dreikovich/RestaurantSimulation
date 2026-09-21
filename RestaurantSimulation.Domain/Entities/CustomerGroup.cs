@@ -7,6 +7,9 @@ public class CustomerGroup : Entity<CustomerGroupId>
 {
     public int Size { get;}
     public DateTime? WaitingSince { get; private set; }
+    
+    private readonly List<Guest> _guests = new();
+    public IReadOnlyCollection<Guest> Guests => _guests;
 
     private CustomerGroup(CustomerGroupId id, int size, DateTime? time) : base(id)
     {
@@ -22,8 +25,14 @@ public class CustomerGroup : Entity<CustomerGroupId>
         }
 
         var customerGroup = new CustomerGroup(CustomerGroupId.New(), size, null);
-        return Result<CustomerGroup>.Success(customerGroup);
 
+        for (int i = 0; i < size; i++)
+        {
+            var guest = Guest.Create(GuestState.Waiting);
+            customerGroup._guests.Add(guest.Value!);
+        }
+        
+        return Result<CustomerGroup>.Success(customerGroup);
     }
 
     public void StartWaiting(DateTime time)
@@ -31,6 +40,22 @@ public class CustomerGroup : Entity<CustomerGroupId>
         if (WaitingSince is null)
         {
             WaitingSince = time;
+        }
+    }
+
+    public void SeatAll()
+    {
+        foreach (var guest in _guests)
+        {
+            guest.Seat();
+        }
+    }
+
+    public void LeaveAll()
+    {
+        foreach (var guest in _guests)
+        {
+            guest.Leave();
         }
     }
 }
